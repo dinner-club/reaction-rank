@@ -1,0 +1,77 @@
+service: reactions 
+
+custom:
+  dbName: ${env:DB_NAME}
+  dbUsername: ${env:DB_USERNAME}
+  dbPassword: ${env:DB_PASSWORD}
+  dbPort:
+    Fn::GetAtt:
+      - pgDB
+      - Endpoint.Port
+  dbSecurityGroupId: ${env:DB_SG_ID}
+  dbSubnetId1: ${env:DB_SUBNET_ID_1}
+  dbSubnetId2: ${env:DB_SUBNET_ID_2}
+  dbSubnetId3: ${env:DB_SUBNET_ID_3}
+  dbAddress:
+    Fn::GetAtt:
+      - pgDB
+      - Endpoint.Address
+  webpack:
+    includeModules:
+      forceInclude:
+        - pg
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-west-2
+  stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - rds-db:connect
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:us-west-2:::"
+            - Ref: AWS::AccountId
+            - db
+            - ${self:custom.dbName}
+  environment:
+    DB_ADDRESS: ${env:DB_ADDRESS, self:custom.dbAddress}
+    DB_PORT: ${env:DB_PORT, self:custom.dbPort}
+    DB_NAME: ${self:custom.dbName}
+    DB_USERNAME: ${self:custom.dbUsername}
+    DB_PASSWORD: ${self:custom.dbPassword}
+  vpc:
+    securityGroupIds:
+      - ${self:custom.dbSecurityGroupId}
+    subnetIds:
+      - ${self:custom.dbSubnetId1}
+      - ${self:custom.dbSubnetId2}
+      - ${self:custom.dbSubnetId3}
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+resources:
+  Resources:
+    pgDB:
+      Type: AWS::RDS::DBInstance
+      Properties:
+        DBName: ${self:custom.dbName}
+        Engine: postgres
+        DBInstanceClass: db.t2.micro
+        AllocatedStorage: 20
+        MasterUsername: ${self:custom.dbUsername}
+        MasterUserPassword: ${self:custom.dbPassword}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+package:
+  individually: true
