@@ -43,6 +43,7 @@ provider:
     DB_NAME: ${self:custom.dbName}
     DB_USERNAME: ${self:custom.dbUsername}
     DB_PASSWORD: ${self:custom.dbPassword}
+    SLACK_TEAM_ID: ${env:SLACK_TEAM_ID}
   vpc:
     securityGroupIds:
       - ${self:custom.dbSecurityGroupId}

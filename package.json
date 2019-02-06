@@ -6,6 +6,7 @@
   "author": "David Dobrynin",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "pg": "^7.8.0",
     "sequelize": "^4.42.0",
@@ -32,6 +33,7 @@
   },
   "scripts": {
     "dev": "node -r dotenv/config node_modules/serverless/bin/serverless offline",
+    "deploy": "node -r dotenv/config node_modules/serverless/bin/serverless deploy --aws-profile personal",
     "c": "node -r dotenv/config -r esm --experimental-repl-await"
   }
 }
