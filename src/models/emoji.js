@@ -4,13 +4,15 @@ import sequelize from "../libs/sequelize";
 export default sequelize.define(
   "emoji",
   {
-    emoji: {
+    name: {
       type: Sequelize.STRING,
       unique: true,
       primaryKey: true
     },
-    // either a url or the name of another (alias) emoji
-    value: {
+    url: {
+      type: Sequelize.STRING
+    },
+    alias: {
       type: Sequelize.STRING
     }
   },

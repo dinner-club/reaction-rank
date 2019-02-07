@@ -15,13 +15,19 @@ export default sequelize.define(
       type: Sequelize.STRING
     },
     item_ts: {
-      type: Sequelize.BOOLEAN
+      type: Sequelize.STRING
     },
     ts: {
       type: Sequelize.STRING
     },
-    emoji: {
+    name: {
       type: Sequelize.STRING
+    },
+    item_user: {
+      type: Sequelize.STRING
+    },
+    deleted: {
+      type: Sequelize.BOOLEAN
     }
   },
   {
