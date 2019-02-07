@@ -36,7 +36,6 @@ try {
             ...user,
             ...user.profile
           });
-          res.sendStatus(200);
         } else if (eventType === "message") {
           await Message.create({
             user,
@@ -81,6 +80,7 @@ try {
         }
       }
     }
+    res.sendStatus(200);
   });
 } catch (e) {
   console.log(e);
